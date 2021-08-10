@@ -20,12 +20,13 @@ namespace GarbageCollection {
       _filePath = filePath;
       _tweets = new ArrayList();
       _timer = timer;
-      ReadFile();
+      // ReadFile();
+      StreamFile();
     }
 
     private void ReadFile() {
       _timer.Start();
-      _csvRead = File.ReadAllText(_filePath).Split('\n').ToList<string>();
+      _csvRead = File.ReadAllLines(_filePath).ToList<string>();
       foreach (string row in _csvRead) {
         string[] queryArray = ParseStringToArray(row);
         if (_numberOfColumn == 0) { _numberOfColumn += queryArray.Length; }
@@ -36,6 +37,21 @@ namespace GarbageCollection {
       }
       _timer.Stop();
       Console.WriteLine(_csvRead.Count + " " + _timer.Elapsed);
+    }
+
+    private void StreamFile() {
+      _timer.Start();
+      IEnumerable<string> stream = File.ReadLines(_filePath);
+      foreach (string row in stream) {
+        string[] queryArray = ParseStringToArray(row);
+        if (_numberOfColumn == 0) { _numberOfColumn += queryArray.Length; }
+        if (queryArray.Length == _numberOfColumn) {
+          IDisposable tweet = new Tweet(queryArray);
+          _tweets.Add(tweet);
+        }
+      }
+      _timer.Stop();
+      Console.WriteLine(stream.Count() + " " + _timer.Elapsed);
     }
 
     private string[] ParseStringToArray(string text) {
@@ -57,10 +73,10 @@ namespace GarbageCollection {
       if (!disposedValue) {
         if (disposing) {
           // TODO: dispose managed state (managed objects)
-          _tweets.Clear();
-          _csvRead.Clear();
+          if (_tweets != null) { _tweets.Clear(); }
+          if (_csvRead != null) { _csvRead.Clear(); }
 
-          Console.WriteLine("_tweets: " + _tweets.Count); // 0
+          Console.WriteLine("Disposed _tweets: " + _tweets.Count); // 0
           GC.Collect(); // is always need this to Dispose?
       }
 
