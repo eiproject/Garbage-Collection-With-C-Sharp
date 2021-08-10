@@ -1,5 +1,7 @@
-﻿namespace GarbageCollection {
-  class Tweet {
+﻿using System;
+
+namespace GarbageCollection {
+  class Tweet : IDisposable {
     private string _id;
     private string _lang;
     private string _date;
@@ -15,6 +17,8 @@
     private string _place;
     private string _followers;
     private string _friends;
+
+    private bool disposedValue;
 
     public string ID { get { return _id; } }
     public string Lang { get { return _lang; } }
@@ -48,6 +52,32 @@
       _place = inputArray[12];
       _followers = inputArray[13];
       _friends = inputArray[14];
+    }
+
+    protected virtual void Dispose(bool disposing) {
+      if (!disposedValue) {
+        if (disposing) {
+          // TODO: dispose managed state (managed objects)
+
+        }
+
+        // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+        // TODO: set large fields to null
+        disposedValue = true;
+      }
+    }
+
+    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+    /* ~Tweet() {
+      // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+      Dispose(disposing: false);
+      Console.WriteLine("Finalizer Tweet");
+    }*/
+
+    public void Dispose() {
+      // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+      Dispose(disposing: true);
+      GC.SuppressFinalize(this);
     }
   }
 }
