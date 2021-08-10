@@ -48,6 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\covid_tweet.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\.gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
